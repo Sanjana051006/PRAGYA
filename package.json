@@ -1,0 +1,21 @@
+{
+  "name": "regime-aware-rainfall-system",
+  "version": "1.0.0",
+  "description": "Regime-Aware AI Rainfall Post-Processing System (District-Level MVP) for IMD & NDMA SACHET",
+  "scripts": {
+    "dev": "python -m uvicorn src.api.server:app --host 127.0.0.1 --port 8000 --reload",
+    "start": "python -m uvicorn src.api.server:app --host 127.0.0.1 --port 8000",
+    "pipeline": "python -m src.orchestration.pipeline",
+    "test": "python -m pytest tests/ -v"
+  },
+  "keywords": [
+    "meteorology",
+    "monsoon",
+    "imd",
+    "ai",
+    "rainfall-post-processing",
+    "sachet"
+  ],
+  "author": "National Weather Analytics Programme",
+  "license": "MIT"
+}

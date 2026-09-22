@@ -1,0 +1,330 @@
+datadoom_version: '1'
+name: sih26080_monsoon_rainfall_v2
+rows: 50000
+seed: 26081
+features:
+- name: sample_id
+  type: numeric
+  dist:
+    name: uniform
+    low: 1
+    high: 50000
+  constraints:
+    min: 1
+    max: 50000
+    integer: true
+- name: forecast_year
+  type: numeric
+  dist:
+    name: uniform
+    low: 2010
+    high: 2025
+  constraints:
+    min: 2010
+    max: 2025
+    integer: true
+- name: monsoon_month
+  type: categorical
+  categories:
+  - June
+  - July
+  - August
+  - September
+  weights:
+  - 0.25
+  - 0.3
+  - 0.3
+  - 0.15
+- name: region
+  type: categorical
+  categories:
+  - west_coast
+  - east_coast
+  - central_india
+  - north_india
+  - northeast_india
+  - himalayan
+  - peninsular_india
+  weights:
+  - 0.18
+  - 0.16
+  - 0.2
+  - 0.14
+  - 0.1
+  - 0.07
+  - 0.15
+- name: latitude
+  type: numeric
+  dist:
+    name: uniform
+    low: 8
+    high: 35
+  constraints:
+    min: 8
+    max: 35
+- name: longitude
+  type: numeric
+  dist:
+    name: uniform
+    low: 68
+    high: 97.5
+  constraints:
+    min: 68
+    max: 97.5
+- name: elevation_m
+  type: numeric
+  dist:
+    name: lognormal
+    mu: 5.8
+    sigma: 1.0
+  constraints:
+    min: 20
+    max: 5000
+- name: lead_time_hours
+  type: numeric
+  dist:
+    name: uniform
+    low: 24
+    high: 120
+  constraints:
+    min: 24
+    max: 120
+    integer: true
+- name: regime
+  type: categorical
+  categories:
+  - active_monsoon
+  - break_monsoon
+  - monsoon_low_depression
+  - coastal_orographic
+  - western_disturbance
+  weights:
+  - 0.34
+  - 0.2
+  - 0.17
+  - 0.21
+  - 0.08
+- name: nwp_rainfall_mm
+  type: numeric
+  dist:
+    name: lognormal
+    mu: 1.4
+    sigma: 1.1
+  constraints:
+    min: 0
+    max: 300
+- name: nwp_temperature_c
+  type: numeric
+  dist:
+    name: normal
+    mean: 27
+    std: 3.2
+  constraints:
+    min: 10
+    max: 40
+- name: relative_humidity
+  type: numeric
+  dist:
+    name: normal
+    mean: 75
+    std: 10
+  constraints:
+    min: 25
+    max: 100
+- name: specific_humidity
+  type: numeric
+  dist:
+    name: normal
+    mean: 15
+    std: 3.5
+  constraints:
+    min: 3
+    max: 30
+- name: wind_speed_ms
+  type: numeric
+  dist:
+    name: gamma
+    shape: 2.0
+    scale: 3.0
+  constraints:
+    min: 0
+    max: 35
+- name: surface_pressure_hpa
+  type: numeric
+  dist:
+    name: normal
+    mean: 1008
+    std: 7
+  constraints:
+    min: 975
+    max: 1038
+- name: vertical_velocity_pa_s
+  type: numeric
+  dist:
+    name: normal
+    mean: -0.03
+    std: 0.1
+  constraints:
+    min: -0.6
+    max: 0.6
+- name: sea_surface_temperature_c
+  type: numeric
+  dist:
+    name: normal
+    mean: 28.2
+    std: 1.2
+  constraints:
+    min: 22
+    max: 33.5
+- name: sst_anomaly_c
+  type: numeric
+  dist:
+    name: normal
+    mean: 0.05
+    std: 0.65
+  constraints:
+    min: -3
+    max: 3
+- name: mjo_phase
+  type: categorical
+  categories:
+  - '1'
+  - '2'
+  - '3'
+  - '4'
+  - '5'
+  - '6'
+  - '7'
+  - '8'
+  weights:
+  - 0.125
+  - 0.125
+  - 0.125
+  - 0.125
+  - 0.125
+  - 0.125
+  - 0.125
+  - 0.125
+- name: enso_index
+  type: numeric
+  dist:
+    name: normal
+    mean: 0
+    std: 0.95
+  constraints:
+    min: -3
+    max: 3
+- name: iod_index
+  type: numeric
+  dist:
+    name: normal
+    mean: 0
+    std: 0.75
+  constraints:
+    min: -2.5
+    max: 2.5
+- name: orographic_factor
+  type: numeric
+  dist:
+    name: uniform
+    low: 0
+    high: 1
+  constraints:
+    min: 0
+    max: 1
+- name: coastal_distance_km
+  type: numeric
+  dist:
+    name: exponential
+    scale: 180
+  constraints:
+    min: 1
+    max: 1000
+- name: forecast_error_mm
+  type: numeric
+  dist:
+    name: normal
+    mean: 0
+    std: 10
+  emit: false
+- name: observed_rainfall_mm
+  type: numeric
+  dist:
+    name: normal
+    mean: 25
+    std: 25
+  constraints:
+    min: 0
+    max: 450
+- name: heavy_rainfall
+  type: boolean
+failures:
+- type: mcar
+  features:
+  - relative_humidity
+  - specific_humidity
+  - wind_speed_ms
+  rate: 0.03
+- type: mar
+  feature: nwp_rainfall_mm
+  driver: lead_time_hours
+  rate: 0.04
+  strength: 1.5
+- type: feature_noise
+  feature: surface_pressure_hpa
+  dist:
+    name: normal
+    mean: 0
+    std: 1.5
+- type: label_noise
+  feature: heavy_rainfall
+  rate: 0.02
+difficulty:
+  enabled: true
+  target: heavy_rainfall
+  band:
+  - 0.72
+  - 0.82
+  probe:
+    model: logreg
+    max_iters: 10
+  knobs:
+  - noise
+  - label_noise
+export:
+  formats:
+  - csv
+  - json
+  - parquet
+  versions:
+  - clean
+  - injected
+  splits:
+    train: 0.8
+    test: 0.2
+  shuffle: true
+  metadata: true
+meta:
+  problem_statement: SIH26080
+  version: v2
+  primary_target: observed_rainfall_mm
+  secondary_target: heavy_rainfall
+  error_target: forecast_error_mm
+  intended_models:
+  - global bias correction
+  - regime-aware bias correction
+  - regression
+  - heavy-rain classifier
+  intended_metrics:
+  - RMSE
+  - MAE
+  - ETS
+  - CSI
+  - POD
+  - FAR
+  - FSS
+  generation_note: V2 adds monsoon-only dates, season/month, region-conditioned geography,
+    elevation, regime-aware forecast error, nonlinear interactions, and controlled
+    corruption. The exact DataDoom v1 engine cannot express conditional geographic/date
+    sampling or interaction terms, so this artifact is a DataDoom-compatible schema
+    plus a post-processed structured synthetic realization.

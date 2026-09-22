@@ -1,0 +1,1305 @@
+/* ==========================================================================
+   India Meteorological Department (IMD) / Government of India Web Design System
+   Conforms to Government of India Guidelines for Indian Government Websites (GIGW)
+   and IMD Mausam (mausam.imd.gov.in) Official Design Hierarchy.
+   ========================================================================== */
+
+:root {
+  /* Government & IMD Brand Colors */
+  --gov-navy: #003366;       /* Official IMD Primary Navy Blue */
+  --gov-navy-dark: #002244;  /* Deep Navy */
+  --gov-blue: #0056b3;       /* Royal Blue */
+  --gov-light-blue: #eef4fb; /* Light Blue tint */
+  --gov-gold: #ffc107;       /* Government Accent Gold */
+  --gov-amber: #b5730e;      /* Warning Amber */
+  --gov-green: #28a745;      /* Success / Normal Green */
+  --gov-red: #c82333;        /* Alert Red */
+
+  /* Neutral System Tokens */
+  --bg: #f4f6f9;             /* Background grey */
+  --surface: #ffffff;        /* Surface white */
+  --ink: #111827;            /* Text primary */
+  --ink-soft: #4b5563;       /* Text secondary */
+  --slate: #6b7280;          /* Muted metadata */
+  --line: #d1d5db;           /* Subtle borders */
+  --line-strong: #9ca3af;    /* Strong borders */
+
+  /* Operational Alert Colors (IMD 4-Stage Warning Scale) */
+  --imd-green: #2e6b3e;      /* Green: No warning */
+  --imd-yellow: #d99b00;     /* Yellow: Watch / Be updated */
+  --imd-orange: #b5730e;     /* Orange: Alert / Be prepared */
+  --imd-red: #9c2a2a;        /* Red: Warning / Take action */
+
+  /* Regime Palette */
+  --teal: #1b6e8c;
+  --teal-100: #e4eff2;
+  --amber: #b5730e;
+  --navy: #003366;
+
+  /* Typography */
+  --font-head: 'Archivo', system-ui, -apple-system, sans-serif;
+  --font-body: 'Source Sans 3', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+/* Dark Mode / High Contrast Theme */
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --ink: #f8fafc;
+  --ink-soft: #cbd5e1;
+  --slate: #94a3b8;
+  --line: #334155;
+  --line-strong: #475569;
+  --gov-navy: #1e3a8a;
+  --gov-navy-dark: #0f172a;
+  --gov-light-blue: #1e293b;
+  --teal-100: #1e293b;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.gov-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* --------------------------------------------------------------------------
+   1. PRAGYA Operational Top Bar
+   -------------------------------------------------------------------------- */
+.pragya-top-bar {
+  background: #06152B;
+  color: #e2e8f0;
+  font-size: 11.5px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0, 210, 255, 0.2);
+}
+.pragya-top-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pragya-top-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.pulse-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  font-weight: 700;
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  font-family: var(--font-mono);
+}
+.system-tag {
+  color: #38bdf8;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.system-sub {
+  color: #94a3b8;
+  font-size: 11px;
+}
+.top-sep {
+  color: #475569;
+}
+.pragya-top-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.utc-clock {
+  color: #cbd5e1;
+}
+.run-badge {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  font-weight: 600;
+}
+.theme-toggle-btn {
+  background: rgba(255,255,255,0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.25);
+  padding: 3px 9px;
+  border-radius: 3px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.theme-toggle-btn:hover {
+  background: rgba(255,255,255,0.22);
+}
+
+/* --------------------------------------------------------------------------
+   2. PRAGYA Main Masthead & Identity
+   -------------------------------------------------------------------------- */
+.pragya-masthead {
+  background: #ffffff;
+  border-bottom: 1.5px solid var(--line);
+  padding: 14px 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.masthead-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.pragya-branding {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.pragya-logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 6px rgba(0, 102, 204, 0.2));
+  transition: transform 0.2s ease;
+}
+.pragya-logo-icon:hover {
+  transform: scale(1.05);
+}
+.pragya-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.pragya-main-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.brand-name {
+  font-family: var(--font-head);
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: #0A2540;
+  background: linear-gradient(135deg, #0A2540 0%, #0056b3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+  margin: 0;
+}
+.version-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: #0077b6;
+  background: #e0f2fe;
+  padding: 1px 6px;
+  border-radius: 3px;
+  border: 1px solid #bae6fd;
+}
+.pragya-tagline {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  letter-spacing: -0.01em;
+}
+.pragya-chips-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+.tech-pill {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid #cbd5e1;
+}
+.tech-pill.highlight {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+/* Center Search Box */
+.header-search-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.search-wrap {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--bg);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.search-wrap:focus-within {
+  border-color: #0066cc;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.12);
+}
+.search-wrap input {
+  border: none;
+  background: transparent;
+  padding: 7px 12px;
+  font-size: 13px;
+  width: 250px;
+  outline: none;
+  color: var(--ink);
+}
+.search-wrap button {
+  background: #003366;
+  color: #ffffff;
+  border: none;
+  padding: 7px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+.search-wrap button:hover {
+  background: #0056b3;
+}
+.operational-stamp {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--slate);
+}
+.live-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+  animation: pulse-dot 1.8s infinite;
+}
+@keyframes pulse-dot {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.25); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+/* Right Telemetry Cards */
+.pragya-telemetry-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.telemetry-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 6px 12px;
+  text-align: left;
+  border-top: 2.5px solid #0056b3;
+}
+.telem-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.telem-val {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-top: 1px;
+}
+.logo-seal {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 800;
+  border: 2px solid var(--gov-navy);
+  background: var(--gov-light-blue);
+  color: var(--gov-navy);
+}
+.seal-inner .seal-title {
+  font-size: 12px;
+  line-height: 1;
+}
+.seal-inner .seal-sub {
+  font-size: 9px;
+  color: var(--slate);
+}
+.badge-sachet {
+  border: 2px solid #b91c1c;
+  background: #fef2f2;
+  color: #991b1b;
+  border-radius: 4px;
+  padding: 6px 10px;
+  text-align: center;
+  font-weight: 800;
+}
+.badge-sachet .badge-title {
+  font-size: 12px;
+  line-height: 1;
+}
+.badge-sachet .badge-sub {
+  font-size: 9px;
+  color: #b91c1c;
+}
+
+/* --------------------------------------------------------------------------
+   4. Primary Government Navigation Bar
+   -------------------------------------------------------------------------- */
+.gov-navbar {
+  background: var(--gov-navy);
+  border-bottom: 2px solid #002244;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.nav-menu {
+  display: flex;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-menu::-webkit-scrollbar {
+  display: none;
+}
+.nav-menu li button {
+  background: none;
+  border: none;
+  color: #ffffff;
+  padding: 12px 16px;
+  font-family: var(--font-head);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.nav-menu li button:hover {
+  background: rgba(255,255,255,0.1);
+  border-bottom-color: var(--gov-gold);
+}
+.nav-menu li button.active {
+  background: rgba(255,255,255,0.15);
+  border-bottom-color: var(--gov-gold);
+  color: #ffc107;
+}
+
+/* --------------------------------------------------------------------------
+   5. Quick-Links Category Boxes (IMD Mausam Style)
+   -------------------------------------------------------------------------- */
+.gov-quicklinks {
+  background: #ffffff;
+  border-bottom: 1px solid var(--line);
+}
+.ql-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+}
+.ql-card {
+  padding: 10px 14px;
+  color: #ffffff;
+}
+.ql-card.ql-navy  { background: #003366; }
+.ql-card.ql-blue  { background: #0056b3; }
+.ql-card.ql-green { background: #28a745; }
+.ql-card.ql-gold  { background: #e0a800; color: #111827; }
+
+.ql-title {
+  font-family: var(--font-head);
+  font-size: 13.5px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.ql-links {
+  font-size: 12px;
+}
+.ql-links a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 500;
+}
+.ql-links a:hover {
+  text-decoration: underline;
+}
+.ql-sep {
+  margin: 0 4px;
+  opacity: 0.6;
+}
+
+/* --------------------------------------------------------------------------
+   6. Scrolling Marquee Ticker
+   -------------------------------------------------------------------------- */
+.gov-marquee-strip {
+  background: #ffffff;
+  border-bottom: 1px solid var(--line);
+  padding: 6px 0;
+  font-size: 13px;
+}
+.marquee-flex {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.marquee-badge {
+  background: #c82333;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.gov-marquee {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   7. Main Workspace Layout (2-Column Government Format)
+   -------------------------------------------------------------------------- */
+.gov-main {
+  padding: 16px 0 40px;
+}
+
+.gov-breadcrumb {
+  font-size: 12.5px;
+  color: var(--slate);
+  margin-bottom: 10px;
+}
+.gov-breadcrumb span {
+  color: var(--gov-blue);
+  cursor: pointer;
+}
+.gov-breadcrumb span:hover {
+  text-decoration: underline;
+}
+
+.page-title-strip {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gov-navy);
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+.page-h2 {
+  font-family: var(--font-head);
+  font-size: 17px;
+  color: var(--gov-navy);
+  font-weight: 700;
+}
+.page-sub {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin-top: 2px;
+}
+
+.gov-layout-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+/* Left Sidebar */
+.gov-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.sidebar-block {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.sidebar-header {
+  background: var(--gov-navy);
+  color: #ffffff;
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 12px;
+  letter-spacing: 0.02em;
+}
+.sidebar-menu {
+  list-style: none;
+}
+.sidebar-item {
+  border-bottom: 1px solid var(--line);
+}
+.sidebar-item:last-child {
+  border-bottom: none;
+}
+.side-link {
+  display: block;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.1s ease, color 0.1s ease;
+}
+.side-link:hover {
+  background: var(--gov-light-blue);
+  color: var(--gov-blue);
+}
+.sidebar-item.active .side-link {
+  background: var(--gov-light-blue);
+  color: var(--gov-navy);
+  font-weight: 700;
+  border-left: 3px solid var(--gov-navy);
+}
+.side-bullet {
+  color: var(--gov-blue);
+  margin-right: 4px;
+}
+
+/* Threshold Scale Box */
+.threshold-legend-list {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+}
+.th-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.th-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.status-content {
+  padding: 10px 12px;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+/* Right Content Area */
+.gov-content-area {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 16px;
+  border-radius: 3px;
+}
+
+.view-section {
+  display: none;
+}
+.view-section.active {
+  display: block;
+}
+
+/* Day Input Bar (IMD Style Radio Bar) */
+.day-input-bar {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.day-radios {
+  display: flex;
+  gap: 14px;
+}
+.radio-label {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+.controls-right-flex {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.scenario-picker {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+.scenario-picker select {
+  padding: 4px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 12.5px;
+}
+.lead-picker {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+}
+
+/* Mock Banner */
+.mock-banner {
+  background: #fff8e6;
+  border: 1px solid #fed7aa;
+  border-left: 4px solid var(--amber);
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  font-size: 13.5px;
+}
+.mock-banner.red-alert {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  border-left-color: var(--imd-red);
+}
+
+/* 12x4 Grid Map Container */
+.grid-map-container {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  padding: 10px;
+  margin-bottom: 16px;
+  border-radius: 3px;
+}
+.grid-map-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--slate);
+  margin-bottom: 8px;
+}
+.mock-grid-map {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 3px;
+  margin-bottom: 8px;
+}
+.grid-cell {
+  height: 28px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 0.1s ease, filter 0.1s ease;
+}
+.grid-cell:hover {
+  transform: scale(1.08);
+  filter: brightness(1.15);
+  z-index: 10;
+}
+.grid-cell.active-regime { background: #1b6e8c; }
+.grid-cell.break-regime  { background: #b5730e; }
+.grid-cell.dep-regime    { background: #9c2a2a; }
+.grid-cell.oro-regime    { background: #2e6b3e; }
+.grid-cell.coastal-regime{ background: #5b4b8a; }
+
+.grid-legend {
+  display: flex;
+  gap: 12px;
+  font-size: 11.5px;
+  flex-wrap: wrap;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 11.5px;
+  font-weight: 600;
+  background: #e2e8f0;
+  color: #1e293b;
+}
+.chip .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.chip.active { background: #e4eff2; color: #1b6e8c; }
+.chip.brk    { background: #fbf0dd; color: #b5730e; }
+.chip.dep    { background: #f7e6e4; color: #9c2a2a; }
+.chip.oro    { background: #e6f0e7; color: #2e6b3e; }
+.chip.coa    { background: #ece8f5; color: #5b4b8a; }
+
+/* --------------------------------------------------------------------------
+   8. Government Data Tables (Clean, Striped, Standard IMD Styling)
+   -------------------------------------------------------------------------- */
+.table-card {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 3px;
+  overflow-x: auto;
+}
+.table-title-strip {
+  background: #f1f5f9;
+  border-bottom: 1.5px solid var(--line-strong);
+  padding: 8px 12px;
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gov-navy);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.gov-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+.gov-table th {
+  background: var(--gov-navy);
+  color: #ffffff;
+  font-family: var(--font-head);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 10px;
+  white-space: nowrap;
+  border-right: 1px solid rgba(255,255,255,0.15);
+}
+.gov-table th:last-child {
+  border-right: none;
+}
+.gov-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  vertical-align: middle;
+}
+.gov-table tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+.gov-table tbody tr:hover {
+  background: #eef4fb;
+}
+
+/* IMD Alert Badges */
+.alert-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-weight: 700;
+  font-size: 11px;
+  text-align: center;
+  color: #ffffff;
+}
+.alert-badge.green  { background: var(--imd-green); }
+.alert-badge.yellow { background: var(--imd-yellow); color: #111827; }
+.alert-badge.orange { background: var(--imd-orange); }
+.alert-badge.red    { background: var(--imd-red); }
+
+/* Action Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 3px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+.btn:hover {
+  background: var(--bg);
+}
+.btn:active {
+  transform: translateY(1px) scale(0.99);
+}
+.btn-primary {
+  background: var(--gov-navy);
+  color: #ffffff;
+  border-color: var(--gov-navy);
+}
+.btn-primary:hover {
+  background: var(--gov-blue);
+  border-color: var(--gov-blue);
+}
+.btn-lead {
+  padding: 3px 8px;
+  font-size: 11.5px;
+}
+.btn-lead.active {
+  background: var(--gov-navy);
+  color: #ffffff;
+  border-color: var(--gov-navy);
+}
+
+/* Scorecard Grid */
+.scorecard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.scorecard-card {
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--gov-navy);
+  padding: 12px;
+  border-radius: 3px;
+}
+.scorecard-card h4 {
+  font-size: 12px;
+  color: var(--slate);
+  font-weight: 600;
+}
+.score-delta {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gov-navy);
+  margin: 4px 0;
+}
+.score-sub {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+}
+.modal-card {
+  background: var(--surface);
+  border-radius: 4px;
+  width: 100%;
+  max-width: 520px;
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+.modal-header {
+  background: var(--gov-light-blue);
+  border-bottom: 1px solid var(--line);
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: var(--slate);
+}
+.modal-body {
+  padding: 16px;
+}
+.modal-footer {
+  background: #f8fafc;
+  border-top: 1px solid var(--line);
+  padding: 10px 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   9. PRAGYA Technical Platform Footer
+   -------------------------------------------------------------------------- */
+.pragya-footer {
+  background: #06152B;
+  color: #cbd5e1;
+  font-size: 12.5px;
+  border-top: 3px solid #0056b3;
+}
+.pragya-footer-title {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: #38bdf8;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.pragya-footer-tagline {
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+.footer-desc {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #94a3b8;
+  margin-bottom: 14px;
+}
+.footer-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.footer-pill {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 28px;
+  padding: 36px 0;
+}
+.footer-heading {
+  font-family: var(--font-head);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  padding-bottom: 6px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.footer-links a {
+  color: #94a3b8;
+  text-decoration: none;
+  transition: color 0.15s ease, padding-left 0.15s ease;
+}
+.footer-links a:hover {
+  color: #38bdf8;
+  padding-left: 3px;
+}
+.pragya-footer-bottom {
+  background: #030C19;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 14px 0;
+  font-size: 11.5px;
+  color: #64748b;
+}
+.footer-bottom-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   10. Responsiveness
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+  .gov-layout-grid {
+    grid-template-columns: 1fr;
+  }
+  .ql-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .ql-grid {
+    grid-template-columns: 1fr;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+  .header-search-box {
+    display: none;
+  }
+  .day-input-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ==========================================================================
+   India Rainfall Map + Interactive Chart Panels
+   ========================================================================== */
+
+.map-charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 18px;
+  margin-bottom: 20px;
+  align-items: start;
+}
+
+.map-panel,
+.chart-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.india-map-wrap {
+  display: flex;
+  gap: 0;
+  align-items: flex-start;
+}
+
+#indiaMap {
+  flex: 1;
+  display: block;
+  width: 100%;
+  max-height: 420px;
+}
+
+.map-region {
+  fill: #E8F4FE;
+  stroke: #486581;
+  stroke-width: 0.75px;
+  cursor: pointer;
+  transition: fill 0.25s ease, opacity 0.15s ease, stroke 0.15s ease;
+}
+.state-path {
+  stroke: #335577;
+  stroke-width: 0.75px;
+  cursor: pointer;
+  transition: fill 0.25s ease, opacity 0.15s ease, stroke 0.15s ease;
+}
+.map-region:hover,
+.state-path:hover {
+  opacity: 0.9;
+  filter: brightness(1.08);
+  stroke: #FFB703 !important;
+  stroke-width: 2px !important;
+}
+.map-region.selected,
+.state-path.map-selected {
+  stroke: #D90429 !important;
+  stroke-width: 2.5px !important;
+  filter: brightness(1.15);
+}
+
+.map-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  fill: #0B2C4D;
+  text-anchor: middle;
+  pointer-events: none;
+  letter-spacing: 0.02em;
+}
+
+.map-val {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  fill: #0B2C4D;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.map-legend {
+  padding: 12px 14px;
+  width: 175px;
+  min-width: 175px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--line);
+  background: var(--surface);
+  box-sizing: border-box;
+}
+.map-legend-title {
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 4px;
+}
+.map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--ink);
+  margin-bottom: 6px;
+  white-space: nowrap;
+}
+.map-legend-item span {
+  display: inline-block;
+  width: 16px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0,0.15);
+  flex-shrink: 0;
+}
+
+.chart-wrap {
+  padding: 14px 14px 10px;
+  height: 440px;
+  position: relative;
+}
+
+/* Chart Mode Switcher Buttons */
+.chart-mode-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn-chart-mode {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 3px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.2;
+}
+.btn-chart-mode:hover {
+  background: var(--bg);
+  color: var(--navy);
+  border-color: var(--navy);
+}
+.btn-chart-mode.active {
+  background: var(--navy);
+  color: #ffffff;
+  border-color: var(--navy);
+}
+
+/* Floating Toast Notification */
+.pragya-toast {
+  position: fixed;
+  top: 48px;
+  right: 24px;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #0A2540;
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+  border-left: 4px solid #00D2FF;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.pragya-toast.toast-show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.pragya-toast.toast-hide {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+.pragya-toast .toast-icon {
+  font-size: 16px;
+  color: #00D2FF;
+}
+
+/* Tactile Animations on User Actions */
+@keyframes pulseGlow {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 102, 204, 0.4); }
+  50% { transform: scale(1.04); box-shadow: 0 0 0 8px rgba(0, 102, 204, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 102, 204, 0); }
+}
+.btn-pulse {
+  animation: pulseGlow 0.45s ease-out;
+}
+
+@keyframes highlightFlash {
+  0% { background-color: rgba(0, 210, 255, 0.20); }
+  100% { background-color: transparent; }
+}
+.highlight-flash {
+  animation: highlightFlash 0.7s ease-out;
+}
+
+@media (max-width: 900px) {
+  .map-charts-row {
+    grid-template-columns: 1fr;
+  }
+}
+

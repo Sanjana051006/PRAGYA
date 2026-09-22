@@ -1,0 +1,12 @@
+{
+  "system": "Regime-Aware AI Rainfall Post-Processing MVP",
+  "models": {
+    "regime_classifier": "C:\\Users\\Sanjana\\Desktop\\SIH 2\\models_store\\regime_classifier.pkl",
+    "bias_correctors": "C:\\Users\\Sanjana\\Desktop\\SIH 2\\models_store\\bias_correctors.pkl",
+    "probability_calibrators": "C:\\Users\\Sanjana\\Desktop\\SIH 2\\models_store\\probability_calibrators.pkl"
+  },
+  "verification_scorecard": "C:\\Users\\Sanjana\\Desktop\\SIH 2\\models_store\\verification_scorecard.json",
+  "overall_rmse_nwp": 13.44838547675021,
+  "overall_rmse_corrected": 5.097920113982022,
+  "rmse_reduction_pct": 62.09269787220636
+}

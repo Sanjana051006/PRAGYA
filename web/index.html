@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>PRAGYA | Post-processing Rainfall with AI for Greater Yield Accuracy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Local offline vendor scripts with CDN fallbacks -->
+  <script src="chart.umd.min.js"></script>
+  <script src="d3.min.js"></script>
+  <script src="topojson-client.min.js"></script>
+</head>
+<body>
+
+  <!-- PRAGYA Top Operational Status Strip -->
+  <div class="pragya-top-bar">
+    <div class="gov-container pragya-top-flex">
+      <div class="pragya-top-left">
+        <span class="pulse-chip"><span class="live-pulse"></span> SYSTEM ACTIVE</span>
+        <span class="top-sep">|</span>
+        <span class="system-tag">PRAGYA METEOROLOGICAL AI PLATFORM</span>
+        <span class="top-sep">•</span>
+        <span class="system-sub">High-Resolution Quantitative Precipitation Forecast (QPF) Post-Processing</span>
+      </div>
+      <div class="pragya-top-right">
+        <span class="utc-clock" id="topClock">2026-09-21 00:00 UTC</span>
+        <span class="top-sep">|</span>
+        <span class="run-badge">CYCLE: T+24 / T+48 / T+72</span>
+        <span class="top-sep">|</span>
+        <button id="themeToggleBtn" class="theme-toggle-btn" title="Toggle High Contrast / Dark Mode">🌓 Contrast</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRAGYA Main Platform Masthead -->
+  <header class="main-masthead pragya-masthead">
+    <div class="gov-container masthead-inner">
+      <div class="emblem-branding pragya-branding">
+        <!-- High-Tech PRAGYA AI Radar / Vortex Logo -->
+        <div class="pragya-logo-icon" title="PRAGYA Meteorological AI Engine">
+          <svg viewBox="0 0 64 64" width="52" height="52" fill="none">
+            <defs>
+              <linearGradient id="pragyaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00D2FF" />
+                <stop offset="50%" stop-color="#0066CC" />
+                <stop offset="100%" stop-color="#0A2540" />
+              </linearGradient>
+              <linearGradient id="rainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFB703" />
+                <stop offset="100%" stop-color="#FB8500" />
+              </linearGradient>
+            </defs>
+            <!-- Atmospheric Radar Wave Rings -->
+            <circle cx="32" cy="32" r="29" stroke="url(#pragyaGrad)" stroke-width="2.5" stroke-dasharray="4 2" opacity="0.4"/>
+            <circle cx="32" cy="32" r="22" stroke="url(#pragyaGrad)" stroke-width="2" opacity="0.7"/>
+            <circle cx="32" cy="32" r="14" stroke="#00D2FF" stroke-width="2.2"/>
+            <!-- Stylized AI Rainfall Droplet Node -->
+            <path d="M32 10 C32 10 44 26 44 34 C44 40.6 38.6 46 32 46 C25.4 46 20 40.6 20 34 C20 26 32 10 32 10 Z" fill="url(#pragyaGrad)" />
+            <path d="M32 20 C32 20 38 29 38 34 C38 37.3 35.3 40 32 40 C28.7 40 26 37.3 26 34 C26 29 32 20 32 20 Z" fill="#E8F4FE" opacity="0.35"/>
+            <!-- Dynamic Neural Spark -->
+            <circle cx="32" cy="34" r="3.5" fill="url(#rainGrad)" />
+          </svg>
+        </div>
+        <div class="dept-titles pragya-titles">
+          <div class="pragya-main-title">
+            <h1 class="brand-name">PRAGYA</h1>
+            <span class="version-tag">v2.4-AI</span>
+          </div>
+          <div class="pragya-tagline">Post-processing Rainfall with AI for Greater Yield Accuracy</div>
+          <div class="pragya-chips-bar">
+            <span class="tech-pill">Regime-Aware Bias Correction</span>
+            <span class="tech-pill">Empirical Quantile Mapping (EQM)</span>
+            <span class="tech-pill">LightGBM Machine Learning</span>
+            <span class="tech-pill highlight">36 States &amp; UTs</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Search & Telemetry Box -->
+      <div class="header-search-box">
+        <div class="search-wrap">
+          <input type="text" placeholder="Search districts, states, regimes, alert levels..." id="portalSearchInput" autocomplete="off">
+          <span id="searchResultCount" style="display:none;font-size:11px;color:var(--slate,#60748a);background:rgba(255,255,255,0.15);border-radius:10px;padding:2px 8px;font-family:var(--font-body,sans-serif);white-space:nowrap;"></span>
+          <button type="button" id="portalSearchClearBtn" aria-label="Clear search" title="Clear (Esc)" onclick="clearSearch()" style="background:none;border:none;cursor:pointer;color:var(--slate,#60748a);font-size:15px;padding:0 4px;display:none;" tabindex="-1">✕</button>
+          <button type="button" id="portalSearchBtn" aria-label="Search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="operational-stamp">
+          <span class="live-pulse"></span>
+          <span id="cycleTimestamp">Operational Forecast Cycle · 21 Sep 2026, 00:00 UTC (T+24)</span>
+        </div>
+      </div>
+
+      <!-- Right System Architecture Telemetry -->
+      <div class="pragya-telemetry-right">
+        <div class="telemetry-card">
+          <div class="telem-label">ACTIVE ENGINE</div>
+          <div class="telem-val">EQM + LightGBM</div>
+        </div>
+        <div class="telemetry-card">
+          <div class="telem-label">PRECISION GAIN</div>
+          <div class="telem-val" style="color: #10B981;">+48% RMSE &darr;</div>
+        </div>
+        <div class="telemetry-card">
+          <div class="telem-label">OROGRAPHIC SKILL</div>
+          <div class="telem-val" style="color: #0077B6;">ETS 0.61</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Primary PRAGYA Command Navigation Bar -->
+  <nav class="gov-navbar pragya-navbar">
+    <div class="gov-container">
+      <ul class="nav-menu">
+        <li><button class="nav-btn active" data-target="view-outlook">District Outlook (QPF)</button></li>
+        <li><button class="nav-btn" data-target="view-cases">Historical Benchmarks</button></li>
+        <li><button class="nav-btn" data-target="view-scorecard">Verification Scorecard</button></li>
+        <li><button class="nav-btn" data-target="view-feedback">Forecaster Feedback &amp; Overrides</button></li>
+        <li><button class="nav-btn" data-target="view-cards">Model Cards &amp; MLOps</button></li>
+        <li><button class="nav-btn" data-target="view-bulletin">Automated Bulletins &amp; CAP</button></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- 4 Operational Pipeline Quick-Access Cards -->
+  <section class="gov-quicklinks pragya-quicklinks">
+    <div class="gov-container">
+      <div class="ql-grid">
+        <div class="ql-card ql-navy">
+          <div class="ql-title">Operational QPF Engine</div>
+          <div class="ql-links">
+            <a href="#view-outlook" class="ql-link">District-wise Forecasts</a>
+            <span class="ql-sep">|</span>
+            <a href="#view-outlook" class="ql-link">24h / 48h / 72h Leads</a>
+          </div>
+        </div>
+        <div class="ql-card ql-blue">
+          <div class="ql-title">Regime-Aware ML</div>
+          <div class="ql-links">
+            <a href="#view-outlook" class="ql-link">Synoptic Weather Grid</a>
+            <span class="ql-sep">|</span>
+            <a href="#view-outlook" class="ql-link">Orographic Lift Vector</a>
+          </div>
+        </div>
+        <div class="ql-card ql-green">
+          <div class="ql-title">Verification &amp; Skill</div>
+          <div class="ql-links">
+            <a href="#view-scorecard" class="ql-link">Scorecard &amp; RMSE Gain</a>
+            <span class="ql-sep">|</span>
+            <a href="#view-scorecard" class="ql-link">Quantile Reliability</a>
+          </div>
+        </div>
+        <div class="ql-card ql-gold">
+          <div class="ql-title">Standard Data Feeds</div>
+          <div class="ql-links">
+            <a href="#view-bulletin" class="ql-link">OASIS CAP v1.2 XML</a>
+            <span class="ql-sep">|</span>
+            <a href="#view-bulletin" class="ql-link">Bilingual Summaries</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRAGYA Operational Marquee Ticker -->
+  <div class="gov-marquee-strip pragya-marquee-strip">
+    <div class="gov-container marquee-flex">
+      <span class="marquee-badge">LIVE MET STREAM:</span>
+      <marquee direction="left" scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();" class="gov-marquee">
+        [PRAGYA Operational Advisory] Synoptic regime analysis active across all 36 States &amp; UTs | Deep atmospheric moisture flux detected along Western Ghats &amp; Central India | AI-corrected QPF indicates elevated extreme precipitation probabilities for active monsoon zones | Real-time bias correction active for T+24 / T+48 / T+72 lead times.
+      </marquee>
+    </div>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="gov-main">
+    <div class="gov-container">
+
+      <!-- Breadcrumb Bar -->
+      <div class="gov-breadcrumb">
+        <span>PRAGYA</span> &gt; <span>Operational AI Engines</span> &gt; <strong id="activeBreadcrumb">District Outlook &amp; Regime-Aware AI Post-Processing</strong>
+      </div>
+
+      <!-- Page Banner -->
+      <div class="page-title-strip">
+        <h2 class="page-h2">PRAGYA — Post-processing Rainfall with AI for Greater Yield Accuracy</h2>
+        <div class="page-sub">Regime-Aware Bias Correction, Empirical Quantile Mapping, &amp; LightGBM Machine Learning Regressors for High-Confidence Quantitative Precipitation Forecasts</div>
+      </div>
+
+      <div class="gov-layout-grid">
+        
+        <!-- Left Sidebar (Accordion / Menu matching IMD Mausam) -->
+        <aside class="gov-sidebar">
+          <div class="sidebar-block">
+            <div class="sidebar-header">PRAGYA Navigation</div>
+            <ul class="sidebar-menu">
+              <li class="sidebar-item active"><a href="javascript:void(0)" class="side-link" data-target="view-outlook"><span class="side-bullet">▪</span> State-wise Districts Outlook</a></li>
+              <li class="sidebar-item"><a href="javascript:void(0)" class="side-link" data-target="view-outlook"><span class="side-bullet">▪</span> All India Synoptic Grid</a></li>
+              <li class="sidebar-item"><a href="javascript:void(0)" class="side-link" data-target="view-cases"><span class="side-bullet">▪</span> Historical Extreme Cases</a></li>
+              <li class="sidebar-item"><a href="javascript:void(0)" class="side-link" data-target="view-scorecard"><span class="side-bullet">▪</span> Verification Scorecard</a></li>
+              <li class="sidebar-item"><a href="javascript:void(0)" class="side-link" data-target="view-feedback"><span class="side-bullet">▪</span> Forecaster Feedback &amp; Overrides</a></li>
+              <li class="sidebar-item"><a href="javascript:void(0)" class="side-link" data-target="view-cards"><span class="side-bullet">▪</span> Model Cards &amp; MLOps Registry</a></li>
+              <li class="sidebar-item"><a href="javascript:void(0)" class="side-link" data-target="view-bulletin"><span class="side-bullet">▪</span> Automated District Bulletins</a></li>
+              <li class="sidebar-item"><a href="javascript:void(0)" class="side-link" data-target="view-bulletin"><span class="side-bullet">▪</span> OASIS CAP v1.2 XML Feed</a></li>
+            </ul>
+          </div>
+
+  <!-- Floating Toast Notification for Operational Actions -->
+  <div id="pragyaToast" class="pragya-toast" role="alert" aria-live="polite"></div>
+
+          <!-- Standard Operational Thresholds Box -->
+          <div class="sidebar-block threshold-box">
+            <div class="sidebar-header" id="sidebarScaleHeader">Rainfall Intensity Scale (mm/24h)</div>
+            <div class="threshold-legend-list">
+              <div class="th-item"><span class="th-swatch" style="background:#FFFFFF; border:1px solid #B9C2CB;"></span> <span id="th0"><strong>No Rain:</strong> 0.0 mm</span></div>
+              <div class="th-item"><span class="th-swatch" style="background:#BCE0FD;"></span> <span id="th1"><strong>Very Light:</strong> 0.1 – 2.4 mm</span></div>
+              <div class="th-item"><span class="th-swatch" style="background:#61A5C2;"></span> <span id="th2"><strong>Light Rain:</strong> 2.5 – 15.5 mm</span></div>
+              <div class="th-item"><span class="th-swatch" style="background:#2A6F97;"></span> <span id="th3"><strong>Moderate:</strong> 15.6 – 64.4 mm</span></div>
+              <div class="th-item"><span class="th-swatch" style="background:#D99B00;"></span> <span id="th4"><strong>Heavy Rain:</strong> 64.5 – 115.5 mm</span></div>
+              <div class="th-item"><span class="th-swatch" style="background:#B5730E;"></span> <span id="th5"><strong>Very Heavy:</strong> 115.6 – 204.4 mm</span></div>
+              <div class="th-item"><span class="th-swatch" style="background:#9C2A2A;"></span> <span id="th6"><strong>Extremely Heavy:</strong> &ge; 204.5 mm</span></div>
+            </div>
+          </div>
+
+          <!-- Active Retraining Queue Status -->
+          <div class="sidebar-block status-box">
+            <div class="sidebar-header">Duty-Desk MLOps Queue</div>
+            <div class="status-content">
+              <div>Overrides Logged: <strong id="sidebarOverrideCount" style="color:var(--navy);">0</strong></div>
+              <div>Retraining Status: <strong style="color:var(--green);">Ready for Cycle</strong></div>
+              <div style="font-size:11.5px; color:var(--slate); margin-top:4px;">Autonomous DB upsert sync active</div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Right Main Workspace -->
+        <div class="gov-content-area">
+
+          <!-- View 1: District Outlook (Main Operational View) -->
+          <section id="view-outlook" class="view-section active">
+            
+            <!-- Alert Banner -->
+            <div class="mock-banner" id="alertBanner">
+              <div class="banner-left">
+                <b id="bannerLevel">Orange</b> — <span id="bannerText">4 districts &gt;50% probability of very heavy rainfall in next 24h.</span>
+              </div>
+              <div>
+                <span class="chip active" id="synopticChip"><span class="dot"></span><span id="synopticRegimeName">Active Monsoon</span></span>
+              </div>
+            </div>
+
+            <!-- Operational Controls Bar (IMD Day Input & Scenario Bar) -->
+            <div class="day-input-bar">
+              <div class="day-radios">
+                <label class="radio-label"><input type="radio" name="rf_period" value="daily" checked> <strong>Daily (24h Accumulated)</strong></label>
+                <label class="radio-label"><input type="radio" name="rf_period" value="weekly"> Weekly Distribution</label>
+                <label class="radio-label"><input type="radio" name="rf_period" value="cumulative"> Cumulative (JJAS)</label>
+              </div>
+              <div class="controls-right-flex">
+                <div class="scenario-picker">
+                  <label for="benchmarkSelect"><strong>Event Scenario:</strong></label>
+                  <select id="benchmarkSelect">
+                    <option value="kerala_2018_orographic">Active Surge (Western Ghats Orographic Extreme)</option>
+                    <option value="depression_2021_bay_of_bengal">Monsoon Depression (East Coast Landfall)</option>
+                    <option value="break_2020_central_india">Break Spell (Suppressed Peninsular Flow)</option>
+                  </select>
+                  <button class="btn btn-primary" id="btnLoadScenario" title="Apply active scenario to Duty-Desk">Apply</button>
+                </div>
+                <div class="lead-picker">
+                  <span><strong>Lead Time:</strong></span>
+                  <button class="btn btn-lead active" data-lead="T+24" title="24h Lead Forecast">T+24</button>
+                  <button class="btn btn-lead" data-lead="T+48" title="48h Lead Forecast">T+48</button>
+                  <button class="btn btn-lead" data-lead="T+72" title="72h Lead Forecast">T+72</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- India Map + District Bar Chart — 2-col layout -->
+            <div class="map-charts-row">
+
+              <!-- LEFT: Interactive India Rainfall Map -->
+              <div class="map-panel">
+                <div class="table-title-strip">
+                  <span><strong>INDIA — Regime &amp; Rainfall Map</strong></span>
+                  <span id="mapTooltipLabel" style="font-size:12px;font-weight:normal;color:var(--slate);">Hover a region · Click to filter table</span>
+                </div>
+                <div class="india-map-wrap">
+                  <!-- D3.js renders the real GeoJSON map here -->
+                  <div id="indiaMapContainer" style="flex:1;min-height:460px;position:relative;">
+                    <div id="indiaMapLoading" style="display:flex;align-items:center;justify-content:center;height:460px;color:var(--slate);font-size:13px;font-family:var(--font-body);">
+                      <span>Loading India map…</span>
+                    </div>
+                  </div>
+
+                  <!-- Map colour legend -->
+                  <div class="map-legend">
+                    <div class="map-legend-title" id="mapLegendTitle">Rainfall (mm / 24h)</div>
+                    <div class="map-legend-item"><span style="background:#E8F4FE"></span> <span id="leg0">No Rain (0.0)</span></div>
+                    <div class="map-legend-item"><span style="background:#BCE0FD"></span> <span id="leg1">Very Light (&lt;2.5)</span></div>
+                    <div class="map-legend-item"><span style="background:#61A5C2"></span> <span id="leg2">Light (2.5–15)</span></div>
+                    <div class="map-legend-item"><span style="background:#2A6F97"></span> <span id="leg3">Moderate (15–64)</span></div>
+                    <div class="map-legend-item"><span style="background:#D99B00"></span> <span id="leg4">Heavy (64–115)</span></div>
+                    <div class="map-legend-item"><span style="background:#B5730E"></span> <span id="leg5">Very Heavy (115–204)</span></div>
+                    <div class="map-legend-item"><span style="background:#9C2A2A"></span> <span id="leg6">Extreme (&ge;204)</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- RIGHT: District Comparison Bar Chart -->
+              <div class="chart-panel">
+                <div class="table-title-strip" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                    <span id="chartMainTitle"><strong>QPF FORECAST &mdash; Raw vs AI Corrected</strong></span>
+                    <span id="chartSubTitle" style="font-size:12px;font-weight:normal;color:var(--slate);">mm / 24h</span>
+                  </div>
+                  <div class="chart-mode-group">
+                    <button class="btn-chart-mode active" data-chartmode="qpf" title="Compare Raw NWP vs AI Corrected (PRAGYA)">QPF (Raw vs AI)</button>
+                    <button class="btn-chart-mode" data-chartmode="trajectory" title="Inspect T+24 / T+48 / T+72 lead-time trajectory">Lead Trajectory</button>
+                    <button class="btn-chart-mode" data-chartmode="probability" title="Inspect Probability of Exceedance">Exceedance Prob.</button>
+                  </div>
+                </div>
+                <div class="chart-wrap" style="height:440px;position:relative;">
+                  <canvas id="districtBarChart" aria-label="District QPF Bar Chart"></canvas>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- REGIME RMSE CHART -->
+            <div class="chart-panel" style="margin-bottom: 20px;">
+              <div class="table-title-strip">
+                <span><strong>REGIME RMSE REDUCTION &mdash; Verification Scorecard</strong></span>
+                <span id="rmseChartSubTitle" style="font-size:12px;font-weight:normal;color:var(--slate);">Raw NWP vs AI Corrected RMSE (mm) · T+24 Lead</span>
+              </div>
+              <div class="chart-wrap" style="height: 200px;">
+                <canvas id="regimeRmseChart" aria-label="Regime RMSE Comparison Chart"></canvas>
+              </div>
+            </div>
+
+            <!-- Synoptic Grid Raster Container -->
+            <div class="grid-map-container">
+              <div class="grid-map-header">
+                <span>SYNOPTIC REGIME MAP (12 &times; 4 METEOROLOGICAL SUBDIVISION BLOCKS)</span>
+                <span>Spatial coherence filter active (minimum cluster size: 3)</span>
+              </div>
+              <div class="mock-grid-map" id="regimeGrid">
+                <!-- Filled via JS -->
+              </div>
+              <div class="grid-legend">
+                <span class="chip active"><span class="dot"></span>Active Monsoon</span>
+                <span class="chip brk"><span class="dot"></span>Break Spell</span>
+                <span class="chip dep"><span class="dot"></span>Low / Depression</span>
+                <span class="chip oro"><span class="dot"></span>Orographic</span>
+                <span class="chip coa"><span class="dot"></span>Coastal-Convective</span>
+              </div>
+            </div>
+
+            <!-- District Outlook Data Table -->
+            <div class="table-card" id="districtTableCard">
+              <div class="table-title-strip">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span>METEOROLOGICAL SUBDIVISION &amp; DISTRICT OUTLOOK (QPF mm &amp; PROBABILITY BANDS)</span>
+                </div>
+                <span style="font-size: 11.5px; font-weight: normal; color: var(--slate);">Calibrated against IMD High-Resolution Gridded Observations</span>
+              </div>
+              <!-- Dedicated In-Table Instant Search & Filter Bar -->
+              <div class="district-search-bar-row" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 12px;background:#f8fafc;border-bottom:1.5px solid var(--line);flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:280px;position:relative;">
+                  <span style="font-size:13px;font-weight:700;color:var(--gov-navy);white-space:nowrap;">🔍 District Search:</span>
+                  <div style="position:relative;flex:1;">
+                    <input type="text" id="districtTableSearchInput" placeholder="Type district or state name (e.g. Shimla, Pune, Kamrup, Patna, Dehradun)..." style="width:100%;padding:6px 28px 6px 10px;border:1.5px solid #0056b3;border-radius:4px;font-size:13px;outline:none;background:#ffffff;color:var(--ink);box-sizing:border-box;" autocomplete="off">
+                    <button type="button" id="districtTableSearchClearBtn" onclick="clearSearch()" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--slate);cursor:pointer;font-size:14px;display:none;padding:2px 4px;" title="Clear search">✕</button>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                  <span id="districtTableCountBadge" style="font-size:12px;font-weight:600;padding:3px 10px;border-radius:12px;background:#e2e8f0;color:var(--gov-navy);white-space:nowrap;">All districts active</span>
+                  <button type="button" class="btn btn-sm" id="districtTableResetBtn" onclick="clearSearch()" style="display:none;padding:3px 8px;font-size:11.5px;">Clear Filter</button>
+                </div>
+              </div>
+              <table class="gov-table">
+                <thead>
+                  <tr>
+                    <th>District</th>
+                    <th>State</th>
+                    <th>Regime</th>
+                    <th>Raw NWP</th>
+                    <th>AI Corrected</th>
+                    <th>Quantile (P10–P90)</th>
+                    <th>P(Very Heavy)</th>
+                    <th>Confidence</th>
+                    <th>Alert Level</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="districtTableBody">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+
+          </section>
+
+          <!-- View 2: Historical Benchmark Cases -->
+          <section id="view-cases" class="view-section">
+            <div class="page-title-strip" style="margin-bottom: 14px;">
+              <h3 style="font-family: var(--font-head); font-size: 18px; color: var(--navy);">Historical Extreme Rainfall Benchmark Evaluator</h3>
+              <p style="font-size: 13px; color: var(--ink-soft);">Deterministic replay of extreme weather events across diverse regimes to stress-test post-processing reliability.</p>
+            </div>
+            <div id="caseStudiesList" class="case-grid">
+              <!-- Populated via JS -->
+            </div>
+          </section>
+
+          <!-- View 3: Verification Scorecard -->
+          <section id="view-scorecard" class="view-section">
+            <div class="page-title-strip" style="margin-bottom: 14px;">
+              <h3 style="font-family: var(--font-head); font-size: 18px; color: var(--navy);">Verification Scorecard &amp; Reliability Metrics</h3>
+              <p style="font-size: 13px; color: var(--ink-soft);">WMO standard statistical verification demonstrating systematic bias reduction and forecast skill improvement over raw NWP.</p>
+            </div>
+            
+            <div class="scorecard-grid">
+              <div class="scorecard-card">
+                <h4>RMSE REDUCTION (ALL REGIMES)</h4>
+                <div class="score-delta" style="color: var(--teal);">-48.3%</div>
+                <div class="score-sub">Raw: 14.8 mm &rarr; Corrected: 7.6 mm</div>
+              </div>
+              <div class="scorecard-card">
+                <h4>EXTREME RAINFALL HIT RATE (POD)</h4>
+                <div class="score-delta" style="color: var(--green);">87.4%</div>
+                <div class="score-sub">Improved from 59.1% in baseline NWP</div>
+              </div>
+              <div class="scorecard-card">
+                <h4>FALSE ALARM RATIO (FAR)</h4>
+                <div class="score-delta" style="color: var(--amber);">0.16</div>
+                <div class="score-sub">Down from 0.38 in operational raw model</div>
+              </div>
+              <div class="scorecard-card">
+                <h4>BRIER SCORE (VERY HEAVY RAIN)</h4>
+                <div class="score-delta" style="color: var(--navy);">0.082</div>
+                <div class="score-sub">Near-perfect probabilistic resolution</div>
+              </div>
+            </div>
+
+            <div class="table-card" style="margin-top: 16px;">
+              <div class="table-title-strip">REGIME-SPECIFIC STATISTICAL PERFORMANCE METRICS</div>
+              <table class="gov-table">
+                <thead>
+                  <tr>
+                    <th>Regime</th>
+                    <th>Sample Size (Station-Days)</th>
+                    <th>Raw NWP RMSE</th>
+                    <th>Corrected RMSE</th>
+                    <th>MAE Gain</th>
+                    <th>Equitable Threat Score (ETS)</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="scorecardTableBody">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- View 4: Forecaster Feedback & Active Learning -->
+          <section id="view-feedback" class="view-section">
+            <div class="page-title-strip" style="margin-bottom: 14px;">
+              <h3 style="font-family: var(--font-head); font-size: 18px; color: var(--navy);">Operational Forecaster Feedback &amp; Override Log</h3>
+              <p style="font-size: 13px; color: var(--ink-soft);">Human-in-the-loop audit trail. Forecaster overrides are queued directly into the retraining pipeline for active continuous model learning.</p>
+            </div>
+
+            <div class="scorecard-grid" style="grid-template-columns: repeat(3, 1fr);">
+              <div class="scorecard-card">
+                <h4>TOTAL OVERRIDES LOGGED</h4>
+                <div class="score-delta" id="statTotalOverrides">0</div>
+                <div class="score-sub">Verified against Doppler Radar</div>
+              </div>
+              <div class="scorecard-card">
+                <h4>QUEUED FOR RETRAINING</h4>
+                <div class="score-delta" style="color: var(--teal);" id="statQueuedSamples">0</div>
+                <div class="score-sub">Autonomous dataset buffer</div>
+              </div>
+              <div class="scorecard-card">
+                <h4>LAST RETRAINING RUN</h4>
+                <div class="score-delta" style="font-size: 18px; color: var(--slate); margin: 6px 0;">2026-09-20 22:00</div>
+                <div class="score-sub">Autonomous nightly cron pipeline</div>
+              </div>
+            </div>
+
+            <div class="table-card" style="margin-top: 16px;">
+              <div class="table-title-strip">RECENT FORECASTER OVERRIDES &amp; JUSTIFICATIONS</div>
+              <table class="gov-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>District</th>
+                    <th>Original Regime</th>
+                    <th>Duty-Desk Override</th>
+                    <th>Forecaster ID</th>
+                    <th>Synoptic Justification</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="overridesTableBody">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- View 5: Model Cards & MLOps Registry -->
+          <section id="view-cards" class="view-section">
+            <div class="page-title-strip" style="margin-bottom: 14px;">
+              <h3 style="font-family: var(--font-head); font-size: 18px; color: var(--navy);">Model Cards &amp; Governance Registry</h3>
+              <p style="font-size: 13px; color: var(--ink-soft);">Institutional memory documenting architecture, known failure modes, training datasets, and limitations for operational transparency.</p>
+            </div>
+            <div id="modelCardsList" class="cards-grid">
+              <!-- Populated via JS -->
+            </div>
+          </section>
+
+          <!-- View 6: Automated District Bulletins & OASIS CAP v1.2 Alerts -->
+          <section id="view-bulletin" class="view-section">
+            <div class="page-title-strip" style="margin-bottom: 14px;">
+              <h3 style="font-family: var(--font-head); font-size: 18px; color: var(--navy);">Automated District Bulletins &amp; OASIS CAP v1.2 Alerts</h3>
+              <p style="font-size: 13px; color: var(--ink-soft);">Automated multi-channel dissemination formats for state disaster management authorities, district collectors, and public warnings.</p>
+            </div>
+
+            <div class="bulletin-split-grid">
+              <div class="table-card">
+                <div class="table-title-strip">
+                  <span>DISASTER MANAGEMENT ADVISORY BULLETIN</span>
+                  <button class="btn btn-sm btn-primary" id="btnDownloadBulletin">Download TXT</button>
+                </div>
+                <div id="bulletinPreview" class="bulletin-content">
+                  <!-- Populated via JS -->
+                </div>
+              </div>
+
+              <div class="table-card">
+                <div class="table-title-strip">
+                  <span>OASIS CAP v1.2 XML FEED PREVIEW</span>
+                  <button class="btn btn-sm btn-primary" id="btnDownloadCap">Download XML</button>
+                </div>
+                <div class="xml-preview">
+                  <pre id="capXmlPreview">Loading CAP XML feed...</pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-card" style="margin-top: 18px;">
+              <div class="table-title-strip">ACTIVE DISTRICT WARNING SCHEDULE</div>
+              <table class="gov-table">
+                <thead>
+                  <tr>
+                    <th>District</th>
+                    <th>Warning Level</th>
+                    <th>Expected Rainfall</th>
+                    <th>Probability</th>
+                    <th>Action Statement</th>
+                    <th>Valid Through</th>
+                  </tr>
+                </thead>
+                <tbody id="bulletinTableBody">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- PRAGYA Platform Technical Footer -->
+  <footer class="gov-footer pragya-footer">
+    <div class="gov-container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="footer-brand-block">
+            <div class="pragya-footer-title">PRAGYA</div>
+            <div class="pragya-footer-tagline">Post-processing Rainfall with AI for Greater Yield Accuracy</div>
+          </div>
+          <p class="footer-desc">
+            Next-generation hydrometeorological intelligence platform integrating empirical quantile mapping, LightGBM machine learning regressors, and terrain kinematic scaling for high-confidence operational rainfall post-processing.
+          </p>
+          <div class="footer-pills">
+            <span class="footer-pill">v2.4 Production Engine</span>
+            <span class="footer-pill">700+ Districts</span>
+            <span class="footer-pill">Pan-India Coverage</span>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">AI Architecture</h4>
+          <ul class="footer-links">
+            <li><a href="#view-cards">Empirical Quantile Mapping (EQM)</a></li>
+            <li><a href="#view-cards">Synoptic Regime Decision Routing</a></li>
+            <li><a href="#view-cards">Terrain Kinematic Ascent Vector</a></li>
+            <li><a href="#view-cards">Quantile Regression Bands (p10–p90)</a></li>
+            <li><a href="#view-feedback">Forecaster Active Learning Loop</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">Operational Modules</h4>
+          <ul class="footer-links">
+            <li><a href="#view-outlook">District Outlook Table (QPF)</a></li>
+            <li><a href="#view-outlook">Pan-India Geographic GIS Map</a></li>
+            <li><a href="#view-outlook">12x4 Synoptic Regime Grid</a></li>
+            <li><a href="#view-cases">Historical Extreme Benchmarks</a></li>
+            <li><a href="#view-scorecard">Verification &amp; Skill Scorecard</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">Standards &amp; Export</h4>
+          <ul class="footer-links">
+            <li><a href="#view-bulletin">OASIS CAP v1.2 XML Alert Feed</a></li>
+            <li><a href="#view-bulletin">Automated Multi-Lingual Bulletins</a></li>
+            <li><a href="#view-scorecard">WMO Verification Standard (ETS / FSS)</a></li>
+            <li><a href="#view-cards">Model Governance &amp; Registry</a></li>
+            <li><a href="/api/v1/forecast/current" target="_blank">REST API Endpoint Specification</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom-strip pragya-footer-bottom">
+      <div class="gov-container footer-bottom-flex">
+        <div>&copy; 2026 PRAGYA — Post-processing Rainfall with AI for Greater Yield Accuracy. All rights reserved.</div>
+        <div>High-Resolution Meteorological AI &amp; Quantitative Precipitation Forecast (QPF) Decision Support.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Forecaster Override Modal -->
+  <div class="modal-overlay" id="overrideModal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-family: var(--font-head); font-size: 18px; color: var(--navy);">Forecaster Override &amp; Active Learning Entry</h3>
+        <button class="modal-close" id="btnCancelOverride">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 13.5px; color: var(--ink-soft); margin-bottom: 14px;">
+          Operational forecasters can re-assign the regime call. The correction function and probability bands will update, and your justification will be logged for model retraining.
+        </p>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 4px;">Target District:</label>
+          <input type="text" id="overrideDistrictName" readonly style="width: 100%; padding: 7px 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 3px;">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 4px;">Original Regime:</label>
+          <input type="text" id="overrideOriginalRegime" readonly style="width: 100%; padding: 7px 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 3px;">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 4px;">Assign New Regime:</label>
+          <select id="overrideSelectRegime" style="width: 100%; padding: 8px 10px; border: 1px solid var(--line-strong); border-radius: 3px;">
+            <option value="Active">Active Monsoon (LLJ &gt; 25kt)</option>
+            <option value="Break">Break Monsoon (Foothill Trough)</option>
+            <option value="Low / Depression">Low / Depression (Cyclonic Vorticity)</option>
+            <option value="Orographic">Orographic (Western Ghats Crest)</option>
+            <option value="Coastal-Convective">Coastal-Convective (Land-Sea Breeze)</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 4px;">Forecaster Duty ID:</label>
+          <input type="text" id="overrideForecasterId" value="MET-OFFICER-402" style="width: 100%; padding: 7px 10px; border: 1px solid var(--line-strong); border-radius: 3px;">
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 4px;">Synoptic Justification:</label>
+          <textarea id="overrideJustification" rows="3" placeholder="State radar, satellite, or synoptic chart evidence..." style="width: 100%; padding: 8px 10px; border: 1px solid var(--line-strong); border-radius: 3px; font-family: inherit; font-size: 13.5px;">INSAT-3D enhanced infrared imagery shows heavy cloud clusters and Doppler radar indicates active rainband propagation.</textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" id="btnCancelOverride2">Cancel</button>
+        <button class="btn btn-primary" id="btnSubmitOverride">Commit Override &amp; Retrain</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- District Detail Chart Modal -->
+  <div class="modal-overlay" id="detailModal" style="display: none;">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3 style="font-family: var(--font-head); font-size: 18px; color: var(--navy);" id="detailDistrictTitle">District Forecast Breakdown</h3>
+        <button class="modal-close" id="btnCloseDetail">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="detailChartContainer" style="padding: 10px 0;">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="btnCloseDetail2">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="india_svg_paths.js"></script>
+  <script src="india_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

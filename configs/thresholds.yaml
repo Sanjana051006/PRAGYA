@@ -1,0 +1,25 @@
+# IMD Operational Heavy-Rainfall Thresholds (24-Hour Accumulated)
+# Conforms to IMD Meteorological Standard Operating Procedure
+
+thresholds_mm:
+  heavy: 64.5
+  very_heavy: 115.5
+  extreme: 204.4
+
+alert_mapping:
+  green:
+    condition: "p_heavy < 0.30"
+    label: "No Warning / Normal"
+    color: "#2E6B3E"
+  yellow:
+    condition: "0.30 <= p_heavy < 0.60 or 0.20 <= p_very_heavy < 0.40"
+    label: "Watch / Be Updated"
+    color: "#D99B00"
+  orange:
+    condition: "p_very_heavy >= 0.40 or 0.25 <= p_extreme < 0.50"
+    label: "Alert / Be Prepared"
+    color: "#B5730E"
+  red:
+    condition: "p_extreme >= 0.50 or p_very_heavy >= 0.75"
+    label: "Warning / Take Action"
+    color: "#9C2A2A"

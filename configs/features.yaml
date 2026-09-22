@@ -1,0 +1,65 @@
+# Feature Store Registry & Configuration
+# Versioned feature schema keyed by (location_id, valid_time)
+
+version: "v1.0"
+updated_at: "2026-09-21T00:00:00Z"
+
+primary_keys:
+  - location_id
+  - valid_time
+
+feature_groups:
+  synoptic_indices:
+    description: "Large-scale monsoon dynamics driving Tier A regime classification"
+    features:
+      - name: monsoon_shear_index
+        unit: "m/s"
+        description: "Zonal wind shear between 850 hPa and 200 hPa (U850 - U200)"
+      - name: vorticity_850
+        unit: "10^-5 s^-1"
+        description: "Relative vorticity at 850 hPa representing monsoon trough / low strength"
+      - name: llj_strength
+        unit: "knots"
+        description: "Findlater Low-Level Jet speed across Arabian Sea & Peninsular India"
+      - name: vertical_wind_shear
+        unit: "m/s"
+        description: "Magnitude of 850-200 hPa vertical shear vector"
+      - name: sst_anomaly
+        unit: "degC"
+        description: "Arabian Sea & Bay of Bengal SST anomaly vs 30-year climatology"
+      - name: day_of_season
+        unit: "days"
+        description: "Integer day count from June 1 (1 to 122 for JJAS)"
+
+  terrain_static:
+    description: "Topographic conditioning for orographic enhancement and rain-shadowing"
+    features:
+      - name: elevation_m
+        unit: "m"
+        description: "Mean district/grid elevation from SRTM 90m DEM"
+      - name: elevation_gradient
+        unit: "dimensionless"
+        description: "Steepness of terrain slope along prevailing southwest monsoon flow"
+      - name: dist_to_coast_km
+        unit: "km"
+        description: "Euclidean distance to closest shoreline (Arabian Sea / Bay of Bengal)"
+      - name: windward_flag
+        unit: "binary"
+        description: "1 if facing prevailing westerly/southwesterly LLJ, 0 if in leeward rain shadow"
+
+  convective_proxy:
+    description: "Mesoscale convective cloud intensity proxies"
+    features:
+      - name: olr_proxy
+        unit: "W/m^2"
+        description: "Outgoing Longwave Radiation proxy from INSAT-3D / cloud-top brightness"
+      - name: convective_instability
+        unit: "J/kg"
+        description: "Equivalent potential temperature gradient / proxy CAPE"
+
+storage:
+  format: "parquet"
+  partition_by:
+    - forecast_year
+    - monsoon_month
+  cache_dir: "data/processed/feature_store/"

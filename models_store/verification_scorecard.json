@@ -1,0 +1,58 @@
+{
+  "overall_rmse_nwp": 13.44838547675021,
+  "overall_rmse_corrected": 5.097920113982022,
+  "rmse_reduction_mm": 8.350465362768187,
+  "rmse_reduction_pct": 62.09269787220636,
+  "threshold_scores": {
+    "heavy": {
+      "nwp": {
+        "ets": 0.0433,
+        "csi": 0.0435,
+        "pod": 0.0435,
+        "far": 0.0
+      },
+      "corrected": {
+        "ets": 0.3916,
+        "csi": 0.3929,
+        "pod": 0.4783,
+        "far": 0.3125
+      }
+    },
+    "very_heavy": {
+      "nwp": {
+        "ets": 0.0,
+        "csi": 0.0,
+        "pod": 0.0,
+        "far": 0.0
+      },
+      "corrected": {
+        "ets": 0.0,
+        "csi": 0.0,
+        "pod": 0.0,
+        "far": 0.0
+      }
+    }
+  },
+  "per_regime_rmse": {
+    "active_monsoon": {
+      "nwp_rmse": 12.078388611876855,
+      "corrected_rmse": 5.117758719962771
+    },
+    "break_monsoon": {
+      "nwp_rmse": 6.79783896966789,
+      "corrected_rmse": 4.228698554690976
+    },
+    "monsoon_low_depression": {
+      "nwp_rmse": 18.705061960455776,
+      "corrected_rmse": 5.528764387029702
+    },
+    "coastal_orographic": {
+      "nwp_rmse": 15.21751310965489,
+      "corrected_rmse": 5.463542062528826
+    },
+    "western_disturbance": {
+      "nwp_rmse": 12.71644638588233,
+      "corrected_rmse": 5.030828553415084
+    }
+  }
+}

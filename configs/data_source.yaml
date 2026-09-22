@@ -1,0 +1,33 @@
+# Data Source Configuration
+# Operational adapter switching between synthetic generators, local datasets, and real ERA5/IMD sources
+
+active_source: "local_dataset"  # Options: synthetic_cycle, local_dataset, era5_reanalysis, imd_operational
+
+sources:
+  synthetic_cycle:
+    description: "In-memory operational synthetic cycle generator for duty-desk simulation"
+    resolution_km: 12.0
+    domain: "india_monsoon"
+  
+  local_dataset:
+    description: "Local 50,000-sample JJAS monsoon historical dataset"
+    file_path: "data/data.injected.csv"
+    fallback_path: "data/raw/data.injected.csv"
+    format: "csv"
+    sample_size: 50000
+
+  era5_reanalysis:
+    description: "ECMWF ERA5 Reanalysis atmospheric pressure levels + surface fields"
+    endpoint: "oci://weather-lake@tenancy/raw/era5/"
+    variables:
+      - u850
+      - v850
+      - z500
+      - mslp
+      - sst
+      - total_precipitation
+
+  imd_operational:
+    description: "India Meteorological Department WRF / NCMRWF NCUM 12km operational forecasts"
+    endpoint: "oci://weather-lake@tenancy/raw/imd_nwp/"
+    update_frequency_hours: 6

@@ -1,0 +1,28 @@
+# SIH26080 V2 Synthetic Dataset Audit
+
+**rows:** `50000`
+
+**columns_exported:** `27`
+
+**clean_heavy_rate:** `0.08388`
+
+**clean_observed_mean:** `16.290933990784154`
+
+**clean_nwp_mean:** `6.222114493983624`
+
+**corr_nwp_observed:** `0.7456651751736836`
+
+**injected_missing_rates:** `{'nwp_rainfall_mm': 0.04024, 'relative_humidity': 0.03078, 'specific_humidity': 0.02934, 'wind_speed_ms': 0.0296}`
+
+**regime_distribution:** `{np.str_('active_monsoon'): 0.33428, np.str_('coastal_orographic'): 0.22784, np.str_('break_monsoon'): 0.19912, np.str_('monsoon_low_depression'): 0.1729, np.str_('western_disturbance'): 0.06586}`
+
+**region_distribution:** `{'central_india': 0.20268, 'west_coast': 0.17686, 'east_coast': 0.15796, 'peninsular_india': 0.15186, 'north_india': 0.14106, 'northeast_india': 0.09924, 'himalayan': 0.07034}`
+
+**month_distribution:** `{7: 0.30174, 8: 0.2963, 6: 0.25128, 9: 0.15068}`
+
+**difficulty_proxy_auc:** `0.7640933364740281`
+
+**temporal_coverage:** `['2010-06-01', '2025-09-30']`
+
+**notes:** `['No off-season dates: all forecast dates fall in June-September.', 'Region, latitude, longitude and elevation are spatially structured in the generated realization.', 'forecast_error_mm is latent and should not be supplied to ML models as an input; it is retained for causal auditing.']`
+
