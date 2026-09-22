@@ -11,7 +11,7 @@
 
 **An Operational-Grade, Regime-Aware AI/ML Decision Support System for High-Resolution Quantitative Precipitation Forecast (QPF) Post-Processing, Probabilistic Risk Assessment, and Automated Disaster Alerting.**
 
-[Explore Live Dashboard](file:///c:/Users/Sanjana/Desktop/SIH%202/web/index.html) • [Model Architecture](#-model-architecture) • [Quickstart](#-quickstart--installation) • [Verification Scorecard](#-verification-scorecard) • [CAP Alerts](#-disaster-alerting--cap-v12)
+[Explore Live Dashboard](web/index.html) • [Model Architecture](#-model-architecture) • [Quickstart](#-quickstart--installation) • [Verification Scorecard](#-verification-scorecard) • [CAP Alerts](#-disaster-alerting--cap-v12)
 
 ---
 
